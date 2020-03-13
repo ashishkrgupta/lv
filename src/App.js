@@ -23,6 +23,10 @@ import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import classes from "./App.module.css"
 
@@ -34,14 +38,28 @@ export default class App extends Component {
       total: 0.0,
       date: new Date(),
     },
+    item:{
+      description:"",
+      unit:"",
+      quantity:0,
+      rate:0.0,
+      price:0.0,
+    },
+    units: ["Mts", "Pc"],
     //particulars: ["Admission Fee","Annual Fee","Tution Fee","Library Fee", "Games Fee", "Computer Fee", "Others Fee", "Exam Fee", "Transport Fee", "Late Fee"],
     
   };
 
   addItem = () => {
     let invoice = {...this.state.invoice};
-    invoice.items.push({description:this.state.currentParticular, rate:500.00, price:this.state.currentPrice});
-    this.setState({invoice, currentParticular:"", currentPrice:0});
+    let item = {...this.state.item};
+    item.price = item.rate * item.quantity;
+    invoice.items.push({...item});
+    item.description = "";
+    item.price = 0;
+    item.quantity = 0;
+    item.rate = 0;
+    this.setState({invoice, item});
   }
 
 
@@ -127,18 +145,46 @@ export default class App extends Component {
               </Grid>
 
               {/* row */}
-              <Grid item xs={9}>
-                <Autocomplete className="width100percent"
-                  options={this.state.particulars}
-                  style={{ width: "100%" }}
-                  inputValue={this.state.currentParticular}
-                  onChange={(e, val) => {this.setState({currentParticular: val});}}
-                  renderInput={params => <TextField style={{ width: "100%" }} {...params} label="Particular" />}
-                />
-              </Grid>    
+              <Grid item xs={4}>
+                <TextField className="width100percent" label="Item Description" 
+                  value={this.state.item.description}
+                  onChange={e => {
+                    let item = {...this.state.item};
+                    item.description = e.target.value;
+                    this.setState({item});
+                    }}/>
+              </Grid>   
+              <Grid item xs={1}>
+                <FormControl className={ "width100percent " }>
+                  <InputLabel id="language-label">Unit</InputLabel>
+                  <Select
+                    value={this.state.item.unit}
+                    onChange={e => {
+                      let item = {...this.state.item};
+                      item.unit = e.target.value;
+                      this.setState({item});
+                    }}
+                  >
+                    {this.state.units.map(name => ( <MenuItem key={name.id} value={name}> {name} </MenuItem> ))}
+                  </Select>
+                </FormControl>
+              </Grid> 
               <Grid item xs={2}>
-                <TextField className="width100percent" label="Price" 
-                  onChange={e => {this.setState({currentPrice: parseFloat(e.target.value)})}}/>
+                <TextField className="width100percent" label="Quantity" 
+                  value={this.state.item.quantity}
+                  onChange={e => {
+                    let item = {...this.state.item};
+                    item.quantity = e.target.value;
+                    this.setState({item});
+                    }}/>
+              </Grid>
+              <Grid item xs={2}>
+                <TextField className="width100percent" label="Rate" 
+                  value={this.state.item.rate}
+                  onChange={e => {let item = {...this.state.item};
+                  item.rate = e.target.value;
+                  this.setState({item});
+                  }}/>
               </Grid>
               <Grid item xs={1}>
                 <Button className="width100percent" variant="contained" onClick={this.addItem} color="primary">Add</Button>
@@ -163,6 +209,9 @@ export default class App extends Component {
                         <TableRow key={index}>
                           <TableCell align="center">{index + 1}</TableCell>
                           <TableCell align="left">{item.description}</TableCell>
+                          <TableCell align="center"></TableCell>
+                          <TableCell align="center">{item.quantity + " " + item.unit}</TableCell>
+                          <TableCell align="center">{item.rate}</TableCell>
                           <TableCell align="center">{item.price}</TableCell>
                           <TableCell align="center"><DeleteIcon onClick={ () =>
                             {
