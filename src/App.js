@@ -12,7 +12,6 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider, 
-  KeyboardDatePicker,
   DatePicker
 } from '@material-ui/pickers';
 import Table from '@material-ui/core/Table';
@@ -32,10 +31,10 @@ export default class App extends Component {
   state = {
     invoice: {
       items: [],
-      total: 500.0,
+      total: 0.0,
       date: new Date(),
     },
-    particulars: ["Admission Fee","Annual Fee","Tution Fee","Library Fee", "Games Fee", "Computer Fee", "Others Fee", "Exam Fee", "Transport Fee", "Late Fee"],
+    //particulars: ["Admission Fee","Annual Fee","Tution Fee","Library Fee", "Games Fee", "Computer Fee", "Others Fee", "Exam Fee", "Transport Fee", "Late Fee"],
     
   };
 
@@ -60,7 +59,7 @@ export default class App extends Component {
           content={() => this.componentRef}
           />
         }
-        title = "Fee Receipt" 
+        title = "Tax Invoice" 
         titleTypographyProps = {{variant: "h5"}}
         >
       </CardHeader>
@@ -70,27 +69,15 @@ export default class App extends Component {
           <CardContent>
             <Grid container direction="row" justify="flex-start" spacing={1} alignItems="center">
               <Grid item xs={12}>
-                <Typography style={{textAlign:"center", fontSize:"24px"}}>GURUKUL SHIKSHAN SANSTHAN</Typography>
-                <Typography style={{textAlign:"center"}}>(Robertsganj, Mirzapur, UP. ESTD: 2020)</Typography>
+                <Typography style={{textAlign:"center", fontSize:"10px"}}>TAX INVOICE</Typography>
+                <Typography style={{textAlign:"center", fontSize:"24px"}}>LAXMI VASTRALAYA</Typography>
+                <Typography style={{textAlign:"center"}}>Chowk Kasimabad, Ghazipur</Typography>
+                <Typography style={{textAlign:"center"}}>GSTIN: 09APYPG4485J1Z0</Typography>
               </Grid>
-              <Grid item xs={4}>
-                <Typography>Student Name</Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <Typography>Ashish</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography>Class</Typography>
-              </Grid>
-              <Grid item xs={8}>
-                <Typography>Class 2</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography>Payment Date</Typography>
-              </Grid>
-              <Grid item xs={8}>
+              <Grid item xs={9}> </Grid>
+              <Grid item xs={3}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardDatePicker
+                  <DatePicker
                     className="width100percent"
                     disableFuture
                     autoOk
@@ -106,8 +93,41 @@ export default class App extends Component {
                   />
                   </MuiPickersUtilsProvider>
               </Grid>
+              <Grid item xs={3}>
+                <Typography>Name</Typography>
+              </Grid>
+              <Grid item xs={9}>
+                <TextField className="width100percent" 
+                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>Address</Typography>
+              </Grid>
+              <Grid item xs={9}>
+                <TextField className="width100percent" 
+                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>Aadhan No</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <TextField className="width100percent" 
+                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography>PAN No</Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <TextField className="width100percent" 
+                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  />
+              </Grid>
+
               {/* row */}
-              <Grid item xs={4}>
+              <Grid item xs={9}>
                 <Autocomplete className="width100percent"
                   options={this.state.particulars}
                   style={{ width: "100%" }}
@@ -115,46 +135,12 @@ export default class App extends Component {
                   onChange={(e, val) => {this.setState({currentParticular: val});}}
                   renderInput={params => <TextField style={{ width: "100%" }} {...params} label="Particular" />}
                 />
-              </Grid>
-              <Grid item xs={2}>
-                { this.state.currentParticular === "Tution Fee" && <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DatePicker
-                    //style={{width:"50%"}}
-                    label="From"
-                    autoOk
-                    variant="inline"
-                    format="MM/yyyy"
-                    views={["month"]}
-                    value={this.state.from }
-                    onChange={date => {
-                      this.setState({from: date});
-                    }}
-                  />
-                </MuiPickersUtilsProvider>}
-              </Grid>
-              <Grid item xs={2}>
-                { this.state.currentParticular === "Tution Fee" && <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <DatePicker
-                    //style={{width:"50%"}}
-                    label="To"
-                    autoOk
-                    variant="inline"
-                    format="MM/yyyy"
-                    views={["month"]}
-                    value={this.state.to }
-                    onChange={date => {
-                      this.setState({to: date});
-                    }}
-                  />
-                </MuiPickersUtilsProvider>}
-              </Grid>
-                
-                  
+              </Grid>    
               <Grid item xs={2}>
                 <TextField className="width100percent" label="Price" 
                   onChange={e => {this.setState({currentPrice: parseFloat(e.target.value)})}}/>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={1}>
                 <Button className="width100percent" variant="contained" onClick={this.addItem} color="primary">Add</Button>
               </Grid>
               {/* row */}
@@ -164,7 +150,10 @@ export default class App extends Component {
                     <TableHead>
                       <TableRow>
                         <TableCell align="center">Sr No</TableCell>
-                        <TableCell align="left">Particulars</TableCell>
+                        <TableCell align="left">Description</TableCell>
+                        <TableCell align="center">SHN Code</TableCell>
+                        <TableCell align="center">QTY</TableCell>
+                        <TableCell align="center">Rate</TableCell>
                         <TableCell align="center">Price</TableCell>
                         <TableCell align="center"></TableCell>
                       </TableRow>
