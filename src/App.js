@@ -40,14 +40,17 @@ export default class App extends Component {
       customerName:"",
       address:"",
       aadhar:"",
-      pan:""
+      pan:"",
+      cgst:0,
+      sgst:0,
+      grandTotal:0,
     },
     item:{
       description:"",
-      unit:"",
-      quantity:0,
-      rate:0.0,
-      price:0.0,
+      unit:"Pc",
+      quantity:"",
+      rate:"",
+      price:"",
     },
     units: ["Mts", "Pc"],
     //particulars: ["Admission Fee","Annual Fee","Tution Fee","Library Fee", "Games Fee", "Computer Fee", "Others Fee", "Exam Fee", "Transport Fee", "Late Fee"],
@@ -60,9 +63,13 @@ export default class App extends Component {
     item.price = item.rate * item.quantity;
     invoice.items.push({...item});
     item.description = "";
-    item.price = 0;
-    item.quantity = 0;
-    item.rate = 0;
+    item.price = "";
+    item.quantity = "";
+    item.rate = "";
+    let total = 0;
+    this.state.invoice.items.forEach(i => { total += i.price});
+    invoice.total = total;
+    invoice.grandTotal = total + invoice.sgst + invoice.cgst;
     this.setState({invoice, item});
   }
 
@@ -198,7 +205,7 @@ export default class App extends Component {
                   value={this.state.item.quantity}
                   onChange={e => {
                     let item = {...this.state.item};
-                    item.quantity = e.target.value;
+                    item.quantity = parseFloat(e.target.value);
                     this.setState({item});
                     }}/>
               </Grid>
@@ -206,7 +213,7 @@ export default class App extends Component {
                 <TextField className="width100percent" label="Rate" 
                   value={this.state.item.rate}
                   onChange={e => {let item = {...this.state.item};
-                  item.rate = e.target.value;
+                  item.rate = parseFloat(e.target.value);
                   this.setState({item});
                   }}/>
               </Grid>
@@ -252,9 +259,19 @@ export default class App extends Component {
               </Grid>
               <Grid item xs={8}> </Grid>
               <Grid item xs={2}> <Typography>Total</Typography> </Grid>
-              <Grid item xs={2}> {
-                total
-              } </Grid>
+              <Grid item xs={2}> { this.state.invoice.total } </Grid>
+
+              <Grid item xs={8}> </Grid>
+              <Grid item xs={2}> <Typography>CGST (2.5%)</Typography> </Grid>
+              <Grid item xs={2}> { this.state.invoice.cgst } </Grid>
+
+              <Grid item xs={8}> </Grid>
+              <Grid item xs={2}> <Typography>SGST (2.5%)</Typography> </Grid>
+              <Grid item xs={2}> { this.state.invoice.sgst } </Grid>
+
+              <Grid item xs={8}> </Grid>
+              <Grid item xs={2}> <Typography>Grand Total</Typography> </Grid>
+              <Grid item xs={2}> { this.state.invoice.grandTotal } </Grid>
             </Grid>
           </CardContent>
         </Card>
