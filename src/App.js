@@ -37,6 +37,10 @@ export default class App extends Component {
       items: [],
       total: 0.0,
       date: new Date(),
+      customerName:"",
+      address:"",
+      aadhar:"",
+      pan:""
     },
     item:{
       description:"",
@@ -111,41 +115,61 @@ export default class App extends Component {
                   />
                   </MuiPickersUtilsProvider>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Typography>Name</Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField className="width100percent" 
-                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  value={this.state.invoice.customerName}
+                  onChange={e => {
+                    let invoice = {...this.state.invoice};
+                    invoice.customerName = e.target.value;
+                    this.setState({invoice});
+                  } }
                   />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Typography>Address</Typography>
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <TextField className="width100percent" 
-                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  value={this.state.invoice.address}
+                  onChange={e => {
+                    let invoice = {...this.state.invoice};
+                    invoice.address = e.target.value;
+                    this.setState({invoice});
+                  } }
                   />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Typography>Aadhan No</Typography>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <TextField className="width100percent" 
-                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  value={this.state.invoice.aadhar}
+                  onChange={e => {
+                    let invoice = {...this.state.invoice};
+                    invoice.aadhar = e.target.value;
+                    this.setState({invoice});
+                  } }
                   />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Typography>PAN No</Typography>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <TextField className="width100percent" 
-                  //onChange={e => this.onChangeHandle(e.target.value, "city")}
+                  value={this.state.invoice.pan}
+                  onChange={e => {
+                    let invoice = {...this.state.invoice};
+                    invoice.pan = e.target.value;
+                    this.setState({invoice});
+                  } }
                   />
               </Grid>
 
               {/* row */}
-              <Grid item xs={4}>
+              <Grid item xs={5}>
                 <TextField className="width100percent" label="Item Description" 
                   value={this.state.item.description}
                   onChange={e => {
@@ -154,7 +178,7 @@ export default class App extends Component {
                     this.setState({item});
                     }}/>
               </Grid>   
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <FormControl className={ "width100percent " }>
                   <InputLabel id="language-label">Unit</InputLabel>
                   <Select
