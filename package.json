@@ -2,19 +2,34 @@
   "name": "lv",
   "version": "0.1.0",
   "private": true,
+  "description": "Server app that uses the @octo-org/octo-app package",
+  "main": "index.js",
+  "author": "",
+  "license": "MIT",
+  "homepage": "http://ashishkrgupta.github.io/lv",
   "dependencies": {
+    "@date-io/date-fns": "1.3.11",
+    "@date-io/moment": "^2.4.0",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "4.0.0-alpha.39",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "date-fns": "^2.8.1",
+    "moment": "^2.24.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "react-to-print": "^2.5.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -30,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
   }
 }
