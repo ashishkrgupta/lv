@@ -21,7 +21,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -75,8 +74,6 @@ export default class App extends Component {
 
 
   render() {
-    let total = 0;
-    this.state.invoice.items.forEach(i => { total += i.price});
     return (<Card >
       <CardHeader
         style={{textAlign:"center", height:"25px"}}
@@ -100,8 +97,7 @@ export default class App extends Component {
               <Grid item xs={12}>
                 <Typography style={{textAlign:"center", fontSize:"10px"}}>TAX INVOICE</Typography>
                 <Typography style={{textAlign:"center", fontSize:"24px"}}>LAXMI VASTRALAYA</Typography>
-                <Typography style={{textAlign:"center"}}>Chowk Kasimabad, Ghazipur</Typography>
-                <Typography style={{textAlign:"center"}}>GSTIN: 09APYPG4485J1Z0</Typography>
+                <Typography style={{textAlign:"center"}}>Chowk Kasimabad, Ghazipur. <span style={{fontSize:"11px"}}>GSTIN: 09APYPG4485J1Z0</span></Typography>
               </Grid>
               <Grid item xs={9}> </Grid>
               <Grid item xs={3}>
@@ -149,7 +145,7 @@ export default class App extends Component {
                   />
               </Grid>
               <Grid item xs={2}>
-                <Typography>Aadhan No</Typography>
+                <Typography>Aadhar No</Typography>
               </Grid>
               <Grid item xs={4}>
                 <TextField className="width100percent" 
@@ -196,12 +192,12 @@ export default class App extends Component {
                       this.setState({item});
                     }}
                   >
-                    {this.state.units.map(name => ( <MenuItem key={name.id} value={name}> {name} </MenuItem> ))}
+                    {this.state.units.map(name => ( <MenuItem key={name} value={name}> {name} </MenuItem> ))}
                   </Select>
                 </FormControl>
               </Grid> 
               <Grid item xs={2}>
-                <TextField className="width100percent" label="Quantity" 
+                <TextField className="width100percent" label="QTY" 
                   value={this.state.item.quantity}
                   onChange={e => {
                     let item = {...this.state.item};
@@ -223,16 +219,16 @@ export default class App extends Component {
               {/* row */}
               <Grid item xs={12}>
                 <TableContainer>
-                  <Table className={classes.table} aria-label="simple table">
+                  <Table className={classes.table} size="small" aria-label="simple table" >
                     <TableHead>
-                      <TableRow>
-                        <TableCell align="center">Sr No</TableCell>
+                      <TableRow style={{borderTop: "solid"}}>
+                        <TableCell align="center" style={{width:"10px"}}>Sr No</TableCell>
                         <TableCell align="left">Description</TableCell>
-                        <TableCell align="center">SHN Code</TableCell>
-                        <TableCell align="center">QTY</TableCell>
-                        <TableCell align="center">Rate</TableCell>
-                        <TableCell align="center">Price</TableCell>
-                        <TableCell align="center"></TableCell>
+                        <TableCell align="center" style={{width:"50px"}}>SHN Code</TableCell>
+                        <TableCell align="center" style={{width:"50px"}}>QTY</TableCell>
+                        <TableCell align="center" style={{width:"100px"}}>Rate</TableCell>
+                        <TableCell align="center" style={{width:"100px"}}>Price</TableCell>
+                        <TableCell align="center" style={{width:"20px"}}></TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -240,11 +236,11 @@ export default class App extends Component {
                         <TableRow key={index}>
                           <TableCell align="center">{index + 1}</TableCell>
                           <TableCell align="left">{item.description}</TableCell>
-                          <TableCell align="center"></TableCell>
-                          <TableCell align="center">{item.quantity + " " + item.unit}</TableCell>
-                          <TableCell align="center">{item.rate}</TableCell>
-                          <TableCell align="center">{item.price}</TableCell>
-                          <TableCell align="center"><DeleteIcon onClick={ () =>
+                          <TableCell align="center" ></TableCell>
+                          <TableCell align="center" >{item.quantity + " " + item.unit}</TableCell>
+                          <TableCell align="center" >{item.rate}</TableCell>
+                          <TableCell align="center" >{item.price}</TableCell>
+                          <TableCell align="center" ><DeleteIcon onClick={ () =>
                             {
                               let invoice = {...this.state.invoice};
                               invoice.items.splice(index, 1);
@@ -253,25 +249,35 @@ export default class App extends Component {
                           }/></TableCell>
                         </TableRow>
                       ))}
+                      <TableRow style={{borderTop: "solid"}}>
+                        <TableCell rowSpan={4} colSpan={3}></TableCell>
+                        <TableCell align="right">Total</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell align="center">{ this.state.invoice.total }</TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell align="right" >CGST</TableCell>
+                        <TableCell align="center">2.5%</TableCell>
+                        <TableCell align="center">{ this.state.invoice.cgst }</TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell align="right" >SGST</TableCell>
+                        <TableCell align="center">2.5%</TableCell>
+                        <TableCell align="center">{ this.state.invoice.sgst }</TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell align="right">Grand Total</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell align="center">{ this.state.invoice.grandTotal }</TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
                     </TableBody>
                   </Table>
                 </TableContainer>
               </Grid>
-              <Grid item xs={8}> </Grid>
-              <Grid item xs={2}> <Typography>Total</Typography> </Grid>
-              <Grid item xs={2}> { this.state.invoice.total } </Grid>
-
-              <Grid item xs={8}> </Grid>
-              <Grid item xs={2}> <Typography>CGST (2.5%)</Typography> </Grid>
-              <Grid item xs={2}> { this.state.invoice.cgst } </Grid>
-
-              <Grid item xs={8}> </Grid>
-              <Grid item xs={2}> <Typography>SGST (2.5%)</Typography> </Grid>
-              <Grid item xs={2}> { this.state.invoice.sgst } </Grid>
-
-              <Grid item xs={8}> </Grid>
-              <Grid item xs={2}> <Typography>Grand Total</Typography> </Grid>
-              <Grid item xs={2}> { this.state.invoice.grandTotal } </Grid>
             </Grid>
           </CardContent>
         </Card>
