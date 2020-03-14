@@ -26,6 +26,9 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
+import Alert from '@material-ui/lab/Alert';
+import Collapse from '@material-ui/core/Collapse';
+import CloseIcon from '@material-ui/icons/Close';
 
 import classes from "./App.module.css"
 
@@ -52,29 +55,67 @@ export default class App extends Component {
       price:"",
     },
     units: ["Mts", "Pc"],
-    //particulars: ["Admission Fee","Annual Fee","Tution Fee","Library Fee", "Games Fee", "Computer Fee", "Others Fee", "Exam Fee", "Transport Fee", "Late Fee"],
-    
+    openAlert: false,
+    alertMessage: "",
   };
 
   addItem = () => {
     let invoice = {...this.state.invoice};
     let item = {...this.state.item};
-    item.price = item.rate * item.quantity;
-    invoice.items.push({...item});
-    item.description = "";
-    item.price = "";
-    item.quantity = "";
-    item.rate = "";
-    let total = 0;
-    this.state.invoice.items.forEach(i => { total += i.price});
-    invoice.total = total;
-    invoice.grandTotal = total + invoice.sgst + invoice.cgst;
-    this.setState({invoice, item});
+    let alertMessage = this.validateItem(item);
+    if (alertMessage === null) {
+      item.price = item.rate * item.quantity;
+      invoice.items.push({...item});
+      item.description = "";
+      item.price = "";
+      item.quantity = "";
+      item.rate = "";
+      let total = 0;
+      this.state.invoice.items.forEach(i => { total += i.price});
+      invoice.total = total;
+      invoice.grandTotal = total + invoice.sgst + invoice.cgst;
+      this.setState({invoice, item, openAlert: false});
+    } else {
+      this.setState({alertMessage, openAlert: true});
+    }
+    
   }
 
+  validateItem = item => {
+    if (item.description === "") {
+      return "Please enter item description";
+    }
+    if (isNaN(item.rate) || item.rate <= 0) {
+      return "Please enter valid Rate";
+    }
+    if (isNaN(item.quantity) || item.quantity <= 0) {
+      return "Please enter valid Quantity";
+    }
+    if (item.unit === "Pc" && (item.quantity % 1) !== 0) {
+      return "Quantity can not be in fraction for Pc.";
+    }
+    return null
+  }
 
   render() {
-    return (<Card >
+    return (
+    <div>
+      <Collapse in={this.state.openAlert}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton
+              size="small"
+              onClick={() => { this.setState({openAlert: false}); }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          { this.state.alertMessage }
+        </Alert>
+      </Collapse>
+    <Card >
       <CardHeader
         style={{textAlign:"center", height:"25px"}}
         action={
@@ -200,17 +241,22 @@ export default class App extends Component {
                 <TextField className="width100percent" label="QTY" 
                   value={this.state.item.quantity}
                   onChange={e => {
-                    let item = {...this.state.item};
-                    item.quantity = parseFloat(e.target.value);
-                    this.setState({item});
+                    if(!isNaN(e.target.value)) {
+                      let item = {...this.state.item};
+                      item.quantity = e.target.value === "" ? "" : parseFloat(e.target.value);
+                      this.setState({item});
+                    }
                     }}/>
               </Grid>
               <Grid item xs={2}>
                 <TextField className="width100percent" label="Rate" 
                   value={this.state.item.rate}
-                  onChange={e => {let item = {...this.state.item};
-                  item.rate = parseFloat(e.target.value);
-                  this.setState({item});
+                  onChange={e => {
+                    if(!isNaN(e.target.value)) {
+                      let item = {...this.state.item};
+                      item.rate = e.target.value === "" ? "" : parseFloat(e.target.value);
+                      this.setState({item});
+                    }
                   }}/>
               </Grid>
               <Grid item xs={1}>
@@ -284,7 +330,9 @@ export default class App extends Component {
 
         
       </CardContent>
-    </Card>);
+    </Card>
+    </div>
+    );
   }
 
 }
