@@ -19,5 +19,6 @@ code {
 @media print { 
   .noprint { 
      visibility: hidden; 
+     display: none;
   } 
 } 
