@@ -15,3 +15,9 @@ code {
 .width100percent {
   width: 100%;
 }
+
+@media print { 
+  .noprint { 
+     visibility: hidden; 
+  } 
+} 

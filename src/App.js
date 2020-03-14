@@ -213,7 +213,7 @@ export default class App extends Component {
               </Grid>
 
               {/* row */}
-              <Grid item xs={5}>
+              <Grid item xs={5} className="noprint">
                 <TextField className="width100percent" label="Item Description" 
                   value={this.state.item.description}
                   onChange={e => {
@@ -222,7 +222,7 @@ export default class App extends Component {
                     this.setState({item});
                     }}/>
               </Grid>   
-              <Grid item xs={2}>
+              <Grid item xs={2} className="noprint">
                 <FormControl className={ "width100percent " }>
                   <InputLabel id="language-label">Unit</InputLabel>
                   <Select
@@ -237,7 +237,7 @@ export default class App extends Component {
                   </Select>
                 </FormControl>
               </Grid> 
-              <Grid item xs={2}>
+              <Grid item xs={2} className="noprint">
                 <TextField className="width100percent" label="QTY" 
                   value={this.state.item.quantity}
                   onChange={e => {
@@ -248,7 +248,7 @@ export default class App extends Component {
                     }
                     }}/>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={2} className="noprint">
                 <TextField className="width100percent" label="Rate" 
                   value={this.state.item.rate}
                   onChange={e => {
@@ -259,7 +259,7 @@ export default class App extends Component {
                     }
                   }}/>
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={1}  className="noprint">
                 <Button className="width100percent" variant="contained" onClick={this.addItem} color="primary">Add</Button>
               </Grid>
               {/* row */}
@@ -286,7 +286,7 @@ export default class App extends Component {
                           <TableCell align="center" >{item.quantity + " " + item.unit}</TableCell>
                           <TableCell align="center" >{item.rate}</TableCell>
                           <TableCell align="center" >{item.price}</TableCell>
-                          <TableCell align="center" ><DeleteIcon onClick={ () =>
+                          <TableCell align="center"  className="noprint"><DeleteIcon onClick={ () =>
                             {
                               let invoice = {...this.state.invoice};
                               invoice.items.splice(index, 1);
